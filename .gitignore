@@ -1,0 +1,45 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+.venv/
+venv/
+*.egg-info/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+
+# Environment
+.env
+.env.local
+*.env
+!.env.example
+
+# LlamaIndex persistence + uploaded docs
+backend/data/
+backend/eval/results/*
+!backend/eval/results/.gitkeep
+
+# Node
+node_modules/
+dist/
+.vite/
+*.tsbuildinfo
+
+# Pulumi
+Pulumi.*.yaml
+!Pulumi.yaml
+infra/.venv/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Editors
+.vscode/
+.idea/
+
+# LangSmith
+.langsmith/
