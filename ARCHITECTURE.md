@@ -114,6 +114,27 @@ with no guarantee of stability.
 that can cascade through the rest of the stack. Default to mature, well-known
 libraries where possible.
 
+### 2026-05-20 — mypy: disabled `disallow_untyped_decorators`
+
+**Decision:** Kept mypy in strict mode but disabled the single sub-flag
+`disallow_untyped_decorators`.
+
+**Why:** FastAPI's route decorators (`@app.get`, `@app.post`, etc.) are not
+typed to the standard mypy strict mode demands. Under full strict mode,
+pre-commit complains and every decorated route handler triggers an "Untyped
+decorator makes function untyped" error, despite the handler itself being fully
+annotated.
+
+**Alternatives considered:** A per-line `# type: ignore[misc]` on every route
+decorator. Rejected because it would have to persists across every endpoint in
+the project and adds noise without adding safety.
+
+**Trade-offs:**
+
+- Lose strict enforcement that decorators are typed.
+- Keep every other strict check on the actual application code.
+- Net: a precise, contained deviation rather than a blunt one.
+
 ### Pending
 
 - LlamaIndex chunking strategy (Phase 2)
