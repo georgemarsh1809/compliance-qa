@@ -135,10 +135,57 @@ the project and adds noise without adding safety.
 - Keep every other strict check on the actual application code.
 - Net: a precise, contained deviation rather than a blunt one.
 
+### 2026-05-21 — Chunking strategy (Phase 2)
+
+**Decision:** SentenceSplitter at chunk_size=512, chunk_overlap=50, for v1.
+
+**Reasoning:** Standard, well-supported default. Respects sentence boundaries
+(no mid-sentence cuts); overlap mitigates boundary-loss. Chosen deliberately as
+a measurable baseline before investing in more sophisticated chunking.
+
+**Observed:** Inspected the persisted docstore.json (42 chunks from the FSA
+guide). Chunks are coherent, but PDF-extraction noise is real... Mangled running
+headers (letter-spacing artifacts) and a front-matter chunk (title, contact
+phone). Deferred cleanup pending eval evidence on whether it degrades retrieval.
+
+**Candidate refinements (pending eval):** semantic chunking, structure-aware
+chunking (the guide's Q&A heading structure aligns well with semantic units),
+small-to-big / sentence-window retrieval, contextual retrieval. Each introduces
+its own tunable parameter; none justified without measured evidence of a
+problem.
+
+### 2026-05-21 — S3 deferred to deployment (Phase 8)
+
+**Decision:** Ingestion operates on local filesystem paths for now. S3
+integration deferred to Phase 8.
+
+**Reasoning:** S3 only becomes necessary at deployment, when laptop-side
+ingestion and App-Runner-side query need to share an index via common storage.
+Until then, local disk is simpler and sufficient for building retrieval, the
+agent, and the eval. `build_index` takes corpus/index directories as parameters,
+so the S3 path is a thin download/upload wrapper around the unchanged pipeline
+(boto3 fetch-to-temp, build, upload), not a rewrite. Adding it now would mean
+debugging AWS credentials and boto3 on top of the agentic work that is the
+actual focus.
+
+### 2026-05-21 — Embedding model: voyage-3.5
+
+**Decision:** Use voyage-3.5 as the embedding model (updated from the
+originally-planned voyage-3).
+
+**Reasoning:** Voyage launched the Voyage 4 series in Jan 2026 and plain
+voyage-3 is no longer in their recommended model list. voyage-3.5 is the current
+general-purpose option, well within free/cheap usage for a corpus this size.
+voyage-4-large (top accuracy) is overkill for a 29-page guide; voyage-4-lite
+would be the cost-optimised pick if cost was more of a factor.
+
+**Note:** The same embedding model must be used at query time as at ingestion
+time, or query and chunk vectors live in incompatible spaces and similarity
+search breaks. Both ingestion and retrieval read the model name from the single
+`embedding_model` setting, keeping them in sync automatically.
+
 ### Pending
 
-- LlamaIndex chunking strategy (Phase 2)
-- Voyage embeddings vs local sentence-transformers (Phase 2)
 - LangGraph state shape (Phase 4)
 - Eval design: LLM-as-judge with retrieval recall and baseline comparison
   (Phase 6)

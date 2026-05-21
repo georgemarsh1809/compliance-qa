@@ -1,11 +1,14 @@
 from functools import lru_cache
+from pathlib import Path
 
 from pydantic_settings import BaseSettings, SettingsConfigDict
+
+ENV_PATH = Path(__file__).parent.parent / ".env"
 
 
 class Settings(BaseSettings):
     model_config = SettingsConfigDict(
-        env_file=".env",
+        env_file=ENV_PATH,
         env_file_encoding="utf-8",
         case_sensitive=False,
         extra="ignore",
@@ -22,7 +25,7 @@ class Settings(BaseSettings):
     log_level: str = "INFO"
     chat_model: str = "claude-haiku-4-5-20251001"
     judge_model: str = "claude-sonnet-4-6"
-    embedding_model: str = "voyage-3"
+    embedding_model: str = "voyage-3.5"
 
 
 @lru_cache

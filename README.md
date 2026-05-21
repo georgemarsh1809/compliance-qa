@@ -42,7 +42,7 @@ See [`ARCHITECTURE.md`](./ARCHITECTURE.md) for design decisions and trade-offs.
 
 - [x] Phase 0: Tooling and skeleton
 - [x] Phase 1: FastAPI shell and config
-- [ ] Phase 2: Document ingestion (LlamaIndex + S3)
+- [x] Phase 2: Document ingestion (LlamaIndex + S3)
 - [ ] Phase 3: Retrieval and first LLM answer
 - [ ] Phase 4: LangGraph agent with grading loop
 - [ ] Phase 5: React frontend
