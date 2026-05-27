@@ -228,8 +228,82 @@ without any runtime check.
 narrowed with `isinstance` (and `is not None` for Optionals) rather than cast
 away. The same boundary issue recurs across the LLM ecosystem.
 
+### 2026-05-27 — Agent architecture: LangGraph retrieval-grading loop (Phase 4)
+
+**Decision:** The agent is a LangGraph StateGraph with four nodes (retrieve,
+grade, rewrite, generate) and a conditional edge after grading. Flow: retrieve
+chunks for the current query, grade whether they're sufficient to answer the
+question, and either generate (if sufficient) or rewrite the query and retrieve
+again (if not), bounded by a retry cap.
+
+**Reasoning:** This adds genuine self-correction over a straight-line RAG
+pipeline; the system evaluates its own retrieval and re-queries when the first
+attempt is inadequate, rather than blindly generating from whatever came back.
+Modelling it as an explicit graph (nodes/edges/state) keeps the decision
+structure legible and modifiable, compared to the same logic buried in nested
+control flow.
+
+**State model:** TypedDict (the LangGraph idiom; plain dict at runtime, typed at
+check-time). `question` (fixed, what we answer) and `query` (mutable, what we
+search with and rewrite) are deliberately separate fields, this separation is
+what makes the rewrite loop coherent: retrieve searches with `query`, generate
+answers the `question`. `retry_count` initialised to 0 at invoke;
+`chunks`/`grade`/`answer` filled in by nodes as the graph runs (NotRequired).
+
+**Honest framing:** LangGraph is arguably overkill for a loop this simple (a
+while-loop would suffice). Chosen to build genuine fluency with the
+stateful-graph model used in production agent systems and named in target roles,
+with the trade-off acknowledged rather than hidden.
+
+### 2026-05-27 — Retry cap and graceful fallback (Phase 4)
+
+**Decision:** The conditional edge after grading caps retries at MAX_RETRIES
+(2). On exhaustion it routes to generate anyway rather than looping or erroring.
+
+**Reasoning:** Without a cap, a question the corpus genuinely cannot answer
+would loop forever (rewrite → retrieve → grade → insufficient → rewrite...). The
+cap limits worst-case latency and API calls. The fall-through to generate means
+the system always produces a best-effort answer; the grounding/honesty rules in
+generate_answer then ensure it admits the gap rather than fabricating. Verified
+on an out-of-corpus question (chilled-food storage temperature): the loop fired
+twice, hit the cap, generated, and honestly declined.
+
+### 2026-05-27 — Rescue cases are rare on this corpus (Phase 4 finding)
+
+**Decision/finding:** Verified the retrieval-grading-rewrite loop works (fires,
+retries, caps, falls back gracefully). However, the specific case where a
+rewrite _rescues_ a near-miss first retrieval is rare on this corpus, even
+colloquially-phrased, legally-imprecise questions ("if a shop sells me something
+different from what I paid for...") retrieve the correct content first-try,
+including at top_k=1.
+
+**Interpretation:** This reflects strong semantic retrieval over a small,
+coherent corpus, not a defect. The self-correction architecture's value scales
+with corpus size and noise, where first-pass retrieval misses more often.
+Documented honestly rather than engineering an artificial failure to force a
+rescue demonstration.
+
+### 2026-05-27 — Shared call_claude helper + node-name/state-key collision (Phase 4)
+
+**Decision:** Extracted a shared
+`call_claude(model, system_prompt, max_tokens, user_content) -> str` helper in
+llm.py, centralising Anthropic client construction, the messages.create call,
+and TextBlock response narrowing. Used by generate_answer and by the
+grade/rewrite nodes.
+
+**Reasoning:** Rule of three; the construct-call-narrow boilerplate appeared in
+three places (generate_answer, grade, rewrite). Centralising means any change to
+how Claude is called (retries, logging, error handling) happens in one place,
+and each node's distinctive logic (its prompt, its parsing) stands out instead
+of being buried in boilerplate. Callers pass keyword arguments to avoid
+positional-order bugs across the similarly-typed parameters.
+
+**Gotcha logged:** LangGraph keeps node names and state keys in one namespace,
+so a node cannot share a name with a state field (a node named "grade" collides
+with the `grade` state key). Resolved by naming graph nodes with a `_node`
+suffix matching the function names.
+
 ### Pending
 
-- LangGraph state shape (Phase 4)
 - Eval design: LLM-as-judge with retrieval recall and baseline comparison
   (Phase 6)

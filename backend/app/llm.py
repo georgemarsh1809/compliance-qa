@@ -8,6 +8,27 @@ from app.config import get_settings
 from app.retrieval import retrieve
 
 
+def call_claude(model: str, system_prompt: str, max_tokens: int, user_content: str) -> str:
+    # 1. Get settings (inside the function so config isn't build on import - cached settings are reused)
+    s = get_settings()
+
+    # 2. Construct client
+    client = Anthropic(api_key=s.anthropic_api_key)
+
+    # 3. Call the client
+    response = client.messages.create(
+        model=model,
+        max_tokens=max_tokens,
+        system=system_prompt,
+        messages=[{"role": "user", "content": user_content}],
+    )
+
+    block = response.content[0]
+    if isinstance(block, TextBlock):
+        return cast(str, block.text.strip())
+    raise ValueError("Expected a text block from Claude, but got something else.")
+
+
 def format_context(nodes: list[NodeWithScore]) -> str:
     context = []
     for i, n in enumerate(nodes, start=1):
@@ -16,16 +37,12 @@ def format_context(nodes: list[NodeWithScore]) -> str:
 
 
 def generate_answer(question: str, nodes: list[NodeWithScore]) -> str:
-    # 1. Get settings (inside the function so config isn't build on import - cached settings are reused)
     s = get_settings()
 
-    # 2. Construct client
-    client = Anthropic(api_key=s.anthropic_api_key)
-
-    # 3. Take nodes and build context
+    # 1. Take nodes and build context
     context = format_context(nodes)
 
-    # 4. Build system prompt
+    # 2. Build system prompt
     system_prompt = """
     You are answering questions about the UK food safety law for food businesses, based on provided sources.
     You are to answer using ONLY the provided sources; DO NOT use outside knowledge.
@@ -34,22 +51,14 @@ def generate_answer(question: str, nodes: list[NodeWithScore]) -> str:
     say so plainly rather than guessing, fabricating, or filling gaps from general knowledge.
     """
 
-    # 5. Build content (the context (nodes) and and the question being asked)
+    # 3. Build content (the context (nodes) and and the question being asked)
     user_content = f"Here are the sources: {context}. Question: {question}"
 
-    # 6. Call the client
-    response = client.messages.create(
-        model=s.chat_model,
-        max_tokens=1024,
-        system=system_prompt,
-        messages=[{"role": "user", "content": user_content}],
+    response = call_claude(
+        model=s.chat_model, system_prompt=system_prompt, max_tokens=1024, user_content=user_content
     )
 
-    # 7. Narrow to a text block so we safely access .text (and fail loudly otherwise)
-    block = response.content[0]
-    if isinstance(block, TextBlock):
-        return cast(str, block.text)
-    raise ValueError("Expected a text block from Claude, but got something else.")
+    return response
 
 
 def answer_question(question: str, top_k: int = 3) -> str:
@@ -60,4 +69,4 @@ def answer_question(question: str, top_k: int = 3) -> str:
 
 
 if __name__ == "__main__":
-    print(answer_question("what temperature should I store chilled food at?"))
+    print(answer_question("what is the definition of due dilligence?"))
