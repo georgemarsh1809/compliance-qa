@@ -1,3 +1,4 @@
+from functools import lru_cache
 from pathlib import Path
 from typing import cast
 
@@ -11,6 +12,7 @@ DATA_DIR = Path(__file__).parent.parent / "data"
 DEFAULT_INDEX_DIR = DATA_DIR / "index"
 
 
+@lru_cache
 def load_index(index_dir: Path = DEFAULT_INDEX_DIR) -> VectorStoreIndex:
     # 1. Get settings (inside the function so config isn't build on import - cached settings are reused)
     settings = get_settings()

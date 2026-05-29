@@ -1,3 +1,4 @@
+from functools import lru_cache
 from typing import cast
 
 from anthropic import Anthropic
@@ -8,14 +9,17 @@ from app.config import get_settings
 from app.retrieval import retrieve
 
 
-def call_claude(model: str, system_prompt: str, max_tokens: int, user_content: str) -> str:
-    # 1. Get settings (inside the function so config isn't build on import - cached settings are reused)
+@lru_cache
+def get_client() -> Anthropic:
     s = get_settings()
+    return Anthropic(api_key=s.anthropic_api_key)
 
-    # 2. Construct client
-    client = Anthropic(api_key=s.anthropic_api_key)
 
-    # 3. Call the client
+def call_claude(model: str, system_prompt: str, max_tokens: int, user_content: str) -> str:
+    # 1. Construct client
+    client = get_client()
+
+    # 2. Call the client
     response = client.messages.create(
         model=model,
         max_tokens=max_tokens,

@@ -1,0 +1,191 @@
+[
+    {
+        "id": "q01",
+        "category": "happy_path",
+        "section": "aims_scope_duties",
+        "question": "What actually counts as \"food\" under the Act, does it include things like drinks or chewing gum?",
+        "reference_answer": "As defined on Page 9 of the guide, 'food', or 'foodstuff' means, 'any substance or product, whether processed, partially processed or unprocessed, intended to be, or reasonably expected to be ingested by humans.' Yes, this includes drinks and chewing gum; also any substance (including water) that's intentionally incorporated into the food during its manufacture, preparation or treatment. Drinking water also counts, but only after the point of compliance (e.g. when it comes out of the tap) (Page 9, para 20).\n\n'Food' does not include the following: animal feed; live animals unless they are prepared for placing on the market for human consumption (e.g. oysters); plants prior to harvesting; medicinal products; cosmetics; tobacco and tobacco products; narcotic or psychotropic substances; residues and contaminants (Page 9, para 21).",
+        "relevant_pages": [9],
+        "notes": ""
+    },
+    {
+        "id": "q02",
+        "category": "happy_path",
+        "section": "aims_scope_duties",
+        "question": "I run a small farm and sell vegetables directly at a farmers' market, does the Food Safety Act apply to me?",
+        "reference_answer": "Yes, the Food Safety Act likely applies to you. The majority of farmers are considered to be running food businesses; the Act defines a food business as 'any business in the course of which commercial operations with respect to food or food sources are carried out' (Page 10, para 24).\n\nHow much of the Act applies to you depends on the operation of the business; all farms are subject to the improvement and closure procedures outlined in paragraphs 79-82. If you sell directly to consumers, you are also subject to the provisions relating to the sale of food (Page 10, para 24).",
+        "relevant_pages": [10],
+        "notes": ""
+    },
+    {
+        "id": "q03",
+        "category": "happy_path",
+        "section": "aims_scope_duties",
+        "question": "What does the Act actually require my food business to do, in plain terms?",
+        "reference_answer": "Your main responsibilities under the Act are: to ensure you do not include anything in food, remove anything from food, or treat food in any way that would damage the health of people eating it; to ensure that the food you serve or sell is of the nature, substance or quality that consumers would expect; and to ensure that the food is labelled, advertised and presented in a way that is not false or misleading (Page 7, paras 11-12).",
+        "relevant_pages": [7],
+        "notes": ""
+    },
+    {
+        "id": "q04",
+        "category": "happy_path",
+        "section": "main_offences",
+        "question": "If I add something to a food product that turns out to harm customers, what offence have I committed?",
+        "reference_answer": "If you make ('render') food that causes harm to customers, you would have committed the offence of rendering food injurious to health under section 7 of the Act (Page 11, para 28). This covers adding or using a harmful substance, removing a necessary constituent, or any other treatment that makes the food injurious (Page 11, para 30). The offence applies whether the act was deliberate or not, subject to the due diligence defence (Page 11-12, para 31).",
+        "relevant_pages": [11, 12],
+        "notes": ""
+    },
+    {
+        "id": "q05",
+        "category": "happy_path",
+        "section": "main_offences",
+        "question": "Is it actually illegal to sell food that's a different thing from what's on the label, like fish substitution?",
+        "reference_answer": "Yes; if you sell food under a false label (such as selling haddock as cod), you are committing an offence under section 14 of the Act. If the purchaser buys an item that is not of the 'nature, substance or quality' demanded, an offence has been committed (Page 12, para 33). The term 'purchaser' can range from a customer in a shop to one company buying from another; it even includes scenarios where no money is involved (for example, winning a raffle) (Page 12, para 33).\n\nThere tends to be overlap between those three terms (nature, substance and quality); critically, the offence only applies when the purchaser is 'prejudiced' to what they're buying, which means the mis-sold item is detrimental to them (Page 12, para 34).",
+        "relevant_pages": [12],
+        "notes": ""
+    },
+    {
+        "id": "q06",
+        "category": "happy_path",
+        "section": "defences",
+        "question": "What is the due diligence defence and how do I actually use it?",
+        "reference_answer": "The due diligence defence is one of the defences to the core offences in the Food Safety Act. It is designed to balance the protection of the consumer against defective food with the trader's right not to be convicted of an offence they have taken all reasonable care to avoid committing (Page 14, paras 44-45).\n\nIf you are charged with an offence but can prove that you 'took all reasonable precautions and exercised all due diligence to avoid the commission of the offence', the defence is available to you. The burden of proof lies with you, but you do not need to establish your case beyond all reasonable doubt; you only need to convince the court that you exercised due diligence on the balance of probabilities (Page 14, para 46). The courts will consider all facts in each case and will decide what 'reasonable care' should include. For example, a small business might not be required to undertake the same precautions as one of the major retailers (Page 14, para 47).\n\nPart of the defence may also be to show that someone else was at fault; if this is claimed, you must provide sufficient information to identify who was responsible (Page 14, para 48).",
+        "relevant_pages": [14],
+        "notes": ""
+    },
+    {
+        "id": "q07",
+        "category": "happy_path",
+        "section": "defences",
+        "question": "I sell branded products from other manufacturers, what does due diligence look like for me versus a retailer selling their own-brand goods?",
+        "reference_answer": "Both retailers can use the due diligence defence, but the requirements differ. In both cases you must show the offence was someone else's fault (and that person wasn't under your control as an employee would be), or that you relied on information they supplied (Page 14-15, paras 50-51).\n\nThe difference: a retailer selling own-label products must also prove they made reasonable checks on the food (or reasonably relied on supplier checks) and had no reason to suspect they were committing an offence (Page 14-15, para 50). A retailer selling branded goods (you) need only show you could not reasonably have been expected to know an offence was being committed, and crucially, you are not required to have carried out reasonable checks of the food supplied to you (Page 15, para 51).",
+        "relevant_pages": [14, 15],
+        "notes": ""
+    },
+    {
+        "id": "q08",
+        "category": "happy_path",
+        "section": "enforcement",
+        "question": "Who actually shows up to my business to enforce food law, and what's the difference between them?",
+        "reference_answer": "In general, there are two main departments within local authorities responsible for enforcing food law: Trading Standards and Environmental Health (Page 16, para 55). Both are overseen by the Food Standards Agency, which advises on enforcement primarily by issuing the statutory Food Law Codes of Practice (there are separate codes for England, Scotland, Wales and Northern Ireland) (Page 16, para 54).\n\nTrading Standards officers are principally responsible for making sure food is accurately labelled, that it contains legal ingredients, and that any claims made are truthful. They also act on national food safety alerts and issue press releases to inform local businesses and consumers about product recalls (Page 16, para 56).\n\nEnvironmental Health practitioners are principally responsible for hygiene, food contamination cases, and any potentially unsafe foods. Like Trading Standards, they also act on national food safety alerts and issue press releases about product recalls (Page 16, para 57).",
+        "relevant_pages": [16],
+        "notes": ""
+    },
+    {
+        "id": "q09",
+        "category": "happy_path",
+        "section": "enforcement",
+        "question": "Can an inspector come into my business without notice, and what are they allowed to do once they're there?",
+        "reference_answer": "Officers have the right to enter any premises unannounced within their authority's area. In some cases, they may also have the power to enter premises anywhere in the country, though in practice this is only used when following up on offences that have happened in their own area (Page 17, para 65).\n\nOnce on premises, officers are authorised to inspect premises, processes and records, and may seize or copy any relevant records and take samples of food for analysis or examination. They can also take their own visual records, such as photographs and videos. If entry is refused, they can apply to a JP or Sheriff for a warrant authorising entry (Page 17, para 66).\n\nThe definition of 'premises' is broad. It includes the obvious buildings where food is prepared, stored or sold (food processing plants, supermarkets, restaurants), as well as farms, vehicles used for transporting or delivering food, ships, aircraft, road-side and market stalls, and even private dwellings if used by food businesses (Page 17, para 67).\n\nOfficers must carry evidence of their identity. They can enter at any reasonable hour, but must give at least 24 hours' notice of their intention to enter houses used only as private dwellings (Page 18, para 70).",
+        "relevant_pages": [17, 18],
+        "notes": ""
+    },
+    {
+        "id": "q10",
+        "category": "happy_path",
+        "section": "enforcement",
+        "question": "If inspectors think there's something wrong with my food, what can they actually do, take it away, shut me down, what?",
+        "reference_answer": "If an authorised officer suspects there is something wrong with your food, they are allowed to detain the product and issue you with a notice requiring the food to be kept in a specific place and not to be used for human consumption while they investigate. They have up to 21 days to carry out their investigations; if they conclude the food is not unsafe, they must withdraw their notice and restore the food to you. If they do deem it unsafe, they must seize the food and put it to a JP or Sheriff (Page 17-18, paras 73-74).\n\nIf they don't feel it's necessary to investigate, they can also seize the suspect food directly. When food is seized, written notification (a Detention of Food Notice) should be issued as soon as is reasonably practicable, including details of the type and quantity of the food seized and any distinguishing marks, codes, or dates. If evidence suggests that detained food may be released, a Withdrawal of Detention of Food Notice should be served. A Food Condemnation Notification should be given to the person in charge of the food warning them that the officer intends to have it dealt with by a JP or Sheriff (Page 18-19, para 74).\n\nWhen food has been seized and a hearing takes place, the person who may later face criminal proceedings can make representations and call witnesses (Page 19, para 75). If a JP or Sheriff decides the food is unsafe, they must order it to be destroyed or otherwise disposed of, with the owner ordered to meet the expenses incurred (Page 19, para 76). If detained or seized food is not eventually condemned but has deteriorated due to the time that has passed, the owner is entitled to compensation equal to the food's loss in value; disputes go to arbitration (Page 19, para 77).\n\nBeyond actions against specific food, officers can also use improvement notices (requiring you to take specific measures) and prohibition orders (prohibiting processes, treatments, premises, or equipment), though in most cases these are now issued under the Food Hygiene Regulations 2006 (Page 19, para 78). In cases of imminent risk to health, an emergency prohibition notice can be served and an emergency prohibition order can close part or all of a food business (Page 19-20, paras 79-80).",
+        "relevant_pages": [17, 18, 19, 20],
+        "notes": ""
+    },
+    {
+        "id": "q11",
+        "category": "happy_path",
+        "section": "enforcement",
+        "question": "If I get an improvement notice or have my business closed, can I appeal it?",
+        "reference_answer": "Yes, anyone running a food business can appeal certain enforcement actions to a Magistrates' court (or in Scotland, to the Sheriff).\n\nThe right of appeal applies where an authority refuses to issue a certificate lifting an emergency prohibition order, or where they close a business by refusing, cancelling, suspending, or revoking registration. Appeals can also be brought against improvement notices in limited circumstances (Page 21, para 87 and footnote 13).\n\nWhen you have a right of appeal, the written notice will state it and the timeframe (normally one month) (Page 21, para 88). If unhappy with the Magistrates' court decision, you can appeal further to the Crown Court (or in Scotland, the Sheriff Principal or the Court of Session) (Page 21, para 89).",
+        "relevant_pages": [21],
+        "notes": ""
+    },
+    {
+        "id": "q12",
+        "category": "happy_path",
+        "section": "enforcement",
+        "question": "What's the maximum a court could fine me or send me to prison for under this Act?",
+        "reference_answer": "Penalties depend on the court and the offence. The Crown Court can imprison offenders for up to two years and/or impose unlimited fines for offences in England and Wales (other than obstruction-related ones) (Page 13, para 39).\n\nMagistrates' courts can fine up to £5,000 per offence and/or impose up to six months' imprisonment (Page 13, para 40). For offences under sections 7 and 14 specifically, the magistrates' maximum fine rises to £20,000 (Page 13, para 41).\n\nIn Scotland, the Sheriff court can impose up to 12 months' imprisonment and a statutory maximum fine of £10,000 (Page 13, para 42). Regulations made under the Act may set their own levels of penalties, not exceeding the above (Page 13, para 43).",
+        "relevant_pages": [13],
+        "notes": ""
+    },
+    {
+        "id": "q13",
+        "category": "out_of_corpus",
+        "section": null,
+        "question": "What temperature do I need to keep chilled food stored at?",
+        "reference_answer": "The provided sources do not contain information about specific temperature requirements for storing chilled food. Hygiene requirements of this kind are covered by separate legislation, the Food Hygiene Regulations 2006, which the guide references but does not detail (Page 6, para 9).",
+        "relevant_pages": [],
+        "notes": "Expected refusal: hygiene specifics are covered by the Food Hygiene Regulations 2006, not this guide."
+    },
+    {
+        "id": "q14",
+        "category": "out_of_corpus",
+        "section": null,
+        "question": "Do I need to declare allergens on my menu, and what's the threshold for needing to do so?",
+        "reference_answer": "The provided sources do not contain information about allergen declaration requirements or thresholds for menus. Food labelling is covered by separate regulations, the Food Labelling Regulations 1996 (as amended), which the guide references but does not detail (Page 13, para 37).",
+        "relevant_pages": [],
+        "notes": "Expected refusal: allergen labelling is covered by the Food Labelling Regulations 1996 (referenced but not detailed in this guide)."
+    },
+    {
+        "id": "q15",
+        "category": "out_of_corpus",
+        "section": null,
+        "question": "How do I actually set up a HACCP plan for my kitchen?",
+        "reference_answer": "The provided sources do not contain information about how to set up a HACCP plan. The guide explicitly states it does not cover the requirement to operate a food safety management system based on HACCP principles (Page 6, para 10).",
+        "relevant_pages": [],
+        "notes": "Expected refusal: the guide explicitly states (para 10) it does not cover HACCP procedural detail."
+    },
+    {
+        "id": "q16",
+        "category": "out_of_corpus",
+        "section": null,
+        "question": "What are the rules around date labelling, \"use by\" versus \"best before\"?",
+        "reference_answer": "The provided sources do not contain information about the rules around date labelling such as 'use by' or 'best before'. Food labelling is covered by separate regulations, the Food Labelling Regulations 1996 (as amended) (Page 13, para 37).",
+        "relevant_pages": [],
+        "notes": "Expected refusal: labelling regulations, not covered in this guide."
+    },
+    {
+        "id": "q17",
+        "category": "out_of_corpus",
+        "section": null,
+        "question": "What is the minimum protein content for a product sold as \"milk powder\"?",
+        "reference_answer": "The provided sources do not contain a specific minimum protein content figure for milk powder. The guide refers to milk powder protein standards only as an illustrative example of compositional standards set in commodity regulations, and notes that separate guidance exists for those standards, but it does not give the figure itself (Page 12, para 33 footnote).",
+        "relevant_pages": [],
+        "notes": "Expected refusal: guide mentions milk-powder protein standards exist as an example but doesn't give the figure. Tests whether the system invents a number."
+    },
+    {
+        "id": "q18",
+        "category": "out_of_corpus",
+        "section": null,
+        "question": "Are food businesses required to have product liability insurance?",
+        "reference_answer": "The provided sources do not contain information about product liability insurance requirements for food businesses. This is outside the scope of the Food Safety Act 1990 and the guide.",
+        "relevant_pages": [],
+        "notes": "Expected refusal: out of domain entirely, not a Food Safety Act topic."
+    },
+    {
+        "id": "q19",
+        "category": "oblique",
+        "section": null,
+        "question": "If someone else messed up and I'm getting blamed, is there any way out?",
+        "reference_answer": "Yes, there are defences available to you under the Food Safety Act. The principal one is the due diligence defence, which is available where you can prove that you 'took all reasonable precautions and exercised all due diligence to avoid the commission of the offence' (Page 14, paras 44-46).\n\nPart of this defence may be to show that someone else was at fault. If you claim this, you must give the prosecution information that enables them to identify who was responsible for the offence. This must be done seven days before the hearing, or within one month of your first court appearance (Page 14, para 48).\n\nThere is also a separate, more general defence: where the commission of an offence was due to the act or default of another person, that defence is specified by the Act (Page 15, para 52).",
+        "relevant_pages": [14, 15],
+        "notes": "Targets due diligence + act-of-another defences (paras 48, 52). Tests retrieval resilience to colloquial phrasing."
+    },
+    {
+        "id": "q20",
+        "category": "oblique",
+        "section": null,
+        "question": "What can I do if a council officer is being unreasonable and I want to push back?",
+        "reference_answer": "There are limits on what authorised officers can do, and you have rights of appeal against certain enforcement decisions.\n\nOfficers must carry evidence of their identity, can enter premises only at reasonable hours, and must give at least 24 hours' notice before entering a private dwelling. They also commit an offence if they disclose commercially sensitive information learnt during an official visit, except in the proper course of their duties (Page 18, paras 70-71).\n\nIf you disagree with an enforcement decision, anyone running a food business can appeal to a Magistrates' court (or, in Scotland, to the Sheriff) where an authority refuses to issue a certificate lifting an emergency prohibition order, or where they close a business by refusing, cancelling, suspending, or revoking registration. Appeals can also be brought against improvement notices in limited circumstances. Written notice of the decision will state the appeal right and the timeframe (normally one month). Further appeals can be made to the Crown Court (Page 21, paras 87-89).",
+        "relevant_pages": [18, 21],
+        "notes": "Targets appeals procedure (paras 87-89) and limits on authorised officers (paras 68-70). Blends two topics."
+    },
+    {
+        "id": "q21",
+        "category": "oblique",
+        "section": null,
+        "question": "A whole batch of my product is already out there and I've realised it's bad, what's supposed to happen now?",
+        "reference_answer": "Where unsafe food has already been distributed, there are control measures designed to remove it from the market. The Act gives the Government powers to make emergency control orders to remove substantial threats to public health, including the prevention of distribution and sale of contaminated food. Many firms would take such steps voluntarily (Page 20, paras 83-84).\n\nThe Food Standards Agency may also issue Food Alerts, which inform other local authorities and consumers about specific problems with food. A 'Food Alert for Information' advises that a product has been withdrawn or recalled and that no further action is required by authorities. A 'Food Alert for Action' is issued where it is necessary to remove a food product from the market rapidly because it may pose an imminent risk to health; specific actions are communicated in the alert. Food Alerts are issued under the Rapid Alert System for Food and Feed set down in Regulation (EC) 178/2002 (Page 20, paras 85-86).\n\nThe General Food Regulations 2004 (implementing Regulation (EC) 178/2002) also created laws on traceability, withdrawal and recall of unsafe food, which the guide references but does not detail (Page 6, para 8).",
+        "relevant_pages": [6, 20],
+        "notes": "Targets emergency control orders, food alerts, withdrawal/recall (paras 83-86). Tests synthesis across emergency procedures."
+    }
+]
