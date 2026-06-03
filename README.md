@@ -44,8 +44,8 @@ See [`ARCHITECTURE.md`](./ARCHITECTURE.md) for design decisions and trade-offs.
 - [x] Phase 1: FastAPI shell and config
 - [x] Phase 2: Document ingestion (LlamaIndex + S3)
 - [x] Phase 3: Retrieval and first LLM answer
-- [ ] Phase 4: LangGraph agent with grading loop
-- [ ] Phase 5: React frontend
+- [x] Phase 4: LangGraph agent with grading loop
+- [x] Phase 5: React frontend
 - [ ] Phase 6: Evaluation framework
 - [ ] Phase 7: Observability
 - [ ] Phase 8: CI/CD and AWS deployment
