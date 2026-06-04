@@ -303,7 +303,173 @@ so a node cannot share a name with a state field (a node named "grade" collides
 with the `grade` state key). Resolved by naming graph nodes with a `_node`
 suffix matching the function names.
 
-### Pending
+### 2026-06-04 — Frontend scaffold: React + TypeScript + Vite + Tailwind v4
 
-- Eval design: LLM-as-judge with retrieval recall and baseline comparison
-  (Phase 6)
+**Decision:** Scaffold `compliance-qa/frontend/` as a sibling to `backend/`
+using Vite's `react-ts` template and pnpm. Tailwind v4 installed via
+`@tailwindcss/vite` plugin. Single `@import "tailwindcss"` in `index.css`
+replaces v3's three-directive approach. React compiler variant not used.
+
+**Reasoning:**
+
+- Tailwind v4's Vite-native plugin removes the need for `tailwind.config.js` and
+  a PostCSS config, reducing setup surface.
+- pnpm consistent with the rest of the project tooling.
+- React compiler is experimental and targets rendering optimisation; the
+  portfolio value here is in TypeScript and RAG integration, not React
+  performance.
+
+**Trade-offs:**
+
+- Tailwind v4 is newer and some plugins (typography) have compatibility issues
+  in this setup. Encountered and resolved during this phase; see entry below.
+
+---
+
+### 2026-06-04 — Component architecture: split components from the start
+
+**Decision:** Split UI into `QueryForm`, `ResponseDisplay`, and `SourceCard`
+rather than a monolithic `App.tsx`. State owned by `App`, passed down as props;
+callbacks passed up for user events.
+
+**Reasoning:**
+
+- More representative of production React patterns than a single-component
+  approach.
+- Directly addresses the TypeScript/React gap in the CV story; split components
+  require explicit prop typing, callback typing, and controlled input patterns.
+
+**Trade-offs:**
+
+- Slightly more scaffolding upfront than a single component. Worth it given the
+  learning and CV objectives.
+
+---
+
+### 2026-06-04 — TypeScript types mirror backend Pydantic models exactly
+
+**Decision:** Defined `QueryRequest`, `Source`, and `QueryResponse` in
+`src/types.ts` as direct TypeScript equivalents of the backend Pydantic models.
+Used `import type` throughout for type-only imports.
+
+**Reasoning:**
+
+- Single source of truth for the API contract. If the backend models change, the
+  frontend types are the first update required.
+- `import type` signals intent clearly and ensures type imports are erased at
+  build time.
+
+---
+
+### 2026-06-04 — Typed fetch client in `src/api.ts`
+
+**Decision:** Single exported `queryCompliance` function handles all API
+interaction. POSTs to `http://localhost:8000/query`, returns
+`Promise<QueryResponse>`. No abstraction layer beyond this.
+
+**Reasoning:**
+
+- Keeps API surface minimal. A full HTTP client library (axios, etc.) is not
+  justified at this scale.
+- Explicit typing of the request and response against `types.ts` keeps the
+  contract enforced at the call site.
+
+---
+
+### 2026-06-04 — Markdown rendering: react-markdown with custom components
+
+**Decision:** Used `react-markdown` to render the answer field. Passed a custom
+`components` prop to style headings and paragraphs for the dark UI, rather than
+using `@tailwindcss/typography`.
+
+**Reasoning:**
+
+- `@tailwindcss/typography` failed to resolve correctly in the Tailwind v4 +
+  Vite plugin setup (both `@plugin` CSS directive and `vite.config.ts` plugin
+  config attempted; both failed).
+- Custom components give explicit control over rendered output and avoid an
+  additional dependency.
+- Tailwind's preflight CSS strips default heading styles, so without either the
+  typography plugin or custom components, markdown renders without visual
+  hierarchy.
+
+**Trade-offs:**
+
+- Custom components require manual maintenance if heading styles need updating.
+- The typography plugin would be the cleaner long-term solution if Tailwind v4
+  compatibility improves.
+
+---
+
+### 2026-06-04 — Eval harness: automated refusal detection, manual review for the rest
+
+**Decision:** `backend/eval/run_evals.py` runs all 21 eval questions against the
+live backend. `out_of_corpus` questions are scored automatically via string
+matching against a list of known refusal signals. Happy path and oblique
+questions are saved to a timestamped JSON file in `eval/results/` for manual
+review.
+
+**Reasoning:**
+
+- Fully automated scoring (LLM-as-judge) adds complexity and introduces its own
+  reliability questions. Not justified before the question set is
+  domain-validated.
+- String matching on refusal signals is transparent and auditable; the signal
+  list was derived empirically by running out-of-corpus questions against the
+  live system and observing actual phrasing.
+- Manual review for happy path and oblique questions is appropriate given the
+  small dataset size and pending domain-expert validation.
+
+**Known limitation:** The model occasionally phrases refusals in novel ways that
+don't match any signal, producing false negatives. Two confirmed cases observed
+across runs (q17, q18). The signal list is updated as new patterns are observed,
+but this is an inherent limitation of the approach.
+
+**Trade-offs:**
+
+- String matching is brittle against novel phrasing. LLM-as-judge is logged as
+  the natural next step once a validated baseline exists.
+
+---
+
+### 2026-06-04 — LLM-as-judge scoring: deferred
+
+**Decision:** Not implemented in this phase. Logged as a future improvement.
+
+**Reasoning:**
+
+- String matching covers the automatable subset (refusal detection) well enough
+  for a first run.
+- LLM-as-judge is better justified once the question set is domain-validated and
+  the string-matching baseline is established. Adding it now would be
+  sophistication ahead of evidence.
+
+---
+
+### 2026-06-04 — Timestamped results files
+
+**Decision:** Each eval run writes a new JSON file to `backend/eval/results/`
+with a `results_YYYYMMDD_HHMMSS.json` filename.
+
+**Reasoning:**
+
+- Preserves run history so score changes across iterations are visible.
+- Directly useful once the question set is updated after domain-expert
+  validation; the before/after comparison is the point.
+
+---
+
+### 2026-06-04 — Eval question set pending domain-expert validation
+
+**Decision:** 21-question eval set drafted and sent to a food industry contact
+for domain-expert review. Harness runs against the current set but results are
+treated as provisional until validation is complete.
+
+**Reasoning:**
+
+- Measure-before-optimise discipline. Running the harness now establishes a
+  baseline. Scores become defensible after validation confirms question quality
+  and reference answers are accurate.
+- The eval categories (happy path, out-of-corpus refusal, oblique phrasing) were
+  chosen to test distinct failure modes rather than to inflate headline pass
+  rates.

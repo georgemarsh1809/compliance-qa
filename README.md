@@ -46,10 +46,10 @@ See [`ARCHITECTURE.md`](./ARCHITECTURE.md) for design decisions and trade-offs.
 - [x] Phase 3: Retrieval and first LLM answer
 - [x] Phase 4: LangGraph agent with grading loop
 - [x] Phase 5: React frontend
-- [ ] Phase 6: Evaluation framework
-- [ ] Phase 7: Observability
-- [ ] Phase 8: CI/CD and AWS deployment
-- [ ] Phase 9: Documentation and polish
+- [x] Phase 6: Evaluation framework
+- [ ] Phase 7: CI/CD and AWS deployment
+- [ ] Phase 8: Documentation and polish
+- [ ] Phase 9: Observability
 
 ## Disclaimer
 
