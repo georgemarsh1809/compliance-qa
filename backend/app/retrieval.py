@@ -1,7 +1,8 @@
-from functools import lru_cache
+import tempfile
 from pathlib import Path
 from typing import cast
 
+import boto3
 from llama_index.core import StorageContext, VectorStoreIndex, load_index_from_storage
 from llama_index.core.schema import NodeWithScore
 from llama_index.embeddings.voyageai import VoyageEmbedding
@@ -12,7 +13,6 @@ DATA_DIR = Path(__file__).parent.parent / "data"
 DEFAULT_INDEX_DIR = DATA_DIR / "index"
 
 
-@lru_cache
 def load_index(index_dir: Path = DEFAULT_INDEX_DIR) -> VectorStoreIndex:
     # 1. Get settings (inside the function so config isn't build on import - cached settings are reused)
     settings = get_settings()
@@ -22,11 +22,20 @@ def load_index(index_dir: Path = DEFAULT_INDEX_DIR) -> VectorStoreIndex:
         model_name=settings.embedding_model, voyage_api_key=settings.voyage_api_key
     )
 
-    # 3. Extract the index from storage
-    storage_context = StorageContext.from_defaults(persist_dir=index_dir)
-
-    # 4. Load the index
-    index = load_index_from_storage(storage_context=storage_context, embed_model=vo)
+    if settings.s3_index_bucket:
+        tmp = tempfile.mkdtemp()
+        s3 = boto3.client("s3", region_name=settings.aws_region)
+        paginator = s3.get_paginator("list_objects_v2")
+        for page in paginator.paginate(Bucket=settings.s3_index_bucket):
+            for obj in page.get("Contents", []):
+                local_path = Path(tmp) / obj["Key"]
+                local_path.parent.mkdir(parents=True, exist_ok=True)
+                s3.download_file(settings.s3_index_bucket, obj["Key"], str(local_path))
+        storage_context = StorageContext.from_defaults(persist_dir=tmp)
+        index = load_index_from_storage(storage_context=storage_context, embed_model=vo)
+    else:
+        storage_context = StorageContext.from_defaults(persist_dir=index_dir)
+        index = load_index_from_storage(storage_context=storage_context, embed_model=vo)
 
     return index
 

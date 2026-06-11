@@ -1,5 +1,7 @@
 import type { QueryRequest, QueryResponse } from './types';
 
+const BASE_URL = import.meta.env.VITE_API_URL;
+
 export async function queryCompliance(
     question: string,
 ): Promise<QueryResponse> {
@@ -7,9 +9,7 @@ export async function queryCompliance(
         question: question,
     };
 
-    const url: string = 'http://localhost:8000/query';
-
-    const response = await fetch(url, {
+    const response = await fetch(`${BASE_URL}/query`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(queryRequest),
