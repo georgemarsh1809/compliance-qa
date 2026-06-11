@@ -22,7 +22,7 @@ app = FastAPI(title="ComplianceQA", version="0.1.0", lifespan=lifespan)
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:5173"],
+    allow_origins=["http://localhost:5173", "https://compliance-qa-project.netlify.app/"],
     allow_methods=["POST"],
     allow_headers=["*"],
 )
