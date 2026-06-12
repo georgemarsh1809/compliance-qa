@@ -473,3 +473,145 @@ treated as provisional until validation is complete.
 - The eval categories (happy path, out-of-corpus refusal, oblique phrasing) were
   chosen to test distinct failure modes rather than to inflate headline pass
   rates.
+
+---
+
+### 2026-06-11 — Docker: linux/amd64 platform target
+
+**Decision:** All Docker builds for production use
+`docker buildx build --platform linux/amd64` explicitly.
+
+**Reasoning:**
+
+- Development machine is an M4 MacBook (ARM64). ECS Fargate in eu-west-2 expects
+  AMD64. Without the explicit platform flag, the image manifest contains no
+  AMD64 descriptor and ECS fails with `CannotPullContainerError`.
+- Docker on Mac handles the cross-compilation transparently via buildx.
+
+**Trade-offs:**
+
+- Builds take longer than native ARM64 builds. Acceptable given build frequency.
+
+---
+
+### 2026-06-11 — load_index: S3 download with local fallback
+
+**Decision:** `load_index` in `retrieval.py` checks `settings.s3_index_bucket`.
+If set, it downloads all index files from S3 to a `tempfile.mkdtemp()` directory
+and loads from there. If not set, it falls back to `DEFAULT_INDEX_DIR` (the
+local `data/index` directory - will only work locally since the /backend/data
+dir is not commited ).
+
+**Reasoning:**
+
+- The original implementation only read from a local directory, making it
+  incompatible with a containerised deployment where the index is not baked into
+  the image.
+- The S3 bucket names are injected as environment variables by ECS at runtime.
+  Locally, `s3_index_bucket` defaults to `None` in `.env`, so the local workflow
+  is unchanged.
+- Storing the index in S3 decouples it from the container image: re-deploying
+  the app does not require re-ingesting the corpus.
+
+**Trade-offs:**
+
+- Cold start latency increases because the index must be downloaded from S3
+  before the app is ready. On the current corpus size this is acceptable.
+- `s3_index_bucket` and `s3_corpus_bucket` changed from required `str` fields to
+  `str | None` with a default of `None` in `Settings` to support the optional
+  local fallback.
+
+**Potential future improvement:** Ingestion pipeline that runs in AWS, reads the
+PDF from S3, builds the index, and writes back to S3 automatically. Currently
+ingestion runs locally and the index is synced to S3 manually with
+`aws s3 sync`.
+
+---
+
+### 2026-06-11 — App Runner deprecated; pivoted to ECS Express Mode
+
+**Decision:** Abandoned App Runner in favour of ECS Express Mode
+(`aws_ecs_express_gateway_service` Terraform resource, AWS provider 6.x).
+
+**Why:** AWS announced on April 30, 2026 that App Runner is no longer accepting
+new customers. Despite the notice stating existing services remain operational,
+three successive deployment attempts produced zero application logs and
+consistent `CREATE_FAILED` health check failures, indicating the platform was
+not starting containers for new services.
+
+**ECS Express Mode:** Fully managed Fargate-based service with built-in load
+balancer, HTTPS, auto scaling, and a public URL. Requires three IAM roles
+(execution, infrastructure, task) compared to App Runner's two. Otherwise the
+conceptual model is identical.
+
+**Infrastructure changes:**
+
+- Replaced `apprunner.tf` with `ecs.tf`
+- Replaced two App Runner IAM roles with three ECS roles in `iam.tf`
+- Upgraded Terraform AWS provider from `~> 5.0` to `~> 6.0` to access
+  `aws_ecs_express_gateway_service`
+- Added `aws_ecs_cluster` resource
+
+**Trade-offs:**
+
+- ECS Express Mode is newer and has less documentation than App Runner had.
+- ECS does not auto-redeploy on image push. Redeployment requires:
+  `aws ecs update-service --cluster compliance-qa --service compliance-qa-backend-3f4c --force-new-deployment --region eu-west-2`.
+  This will be automated via GitHub Actions CI/CD.
+- Migration path noted in case AWS deprecates ECS Express Mode: standard ECS
+  Fargate with explicit VPC, ALB, and task definitions.
+
+---
+
+### 2026-06-11 — Frontend deployment: Netlify with environment variable pattern
+
+**Decision:** Frontend deployed to Netlify at
+`https://compliance-qa-project.netlify.app`. `VITE_API_URL` is set as a Netlify
+environment variable rather than committed in `.env.production`.
+
+**Reasoning:**
+
+- Vite loads `.env.production` at build time when running `pnpm run build`, and
+  `.env` in development. This means the production API URL can be injected
+  either via a committed file or an environment variable present at build time.
+- Setting `VITE_API_URL` in the Netlify dashboard keeps configuration out of the
+  repo and makes it easy to change the backend URL without a commit.
+- `.env.production` is not committed. `.env` is committed (but still ignored) as
+  it contains only `localhost:8000` which is not a secret.
+
+**Build settings:** base directory `frontend`, build command `pnpm run build`,
+publish directory `frontend/dist`.
+
+**Trade-offs:**
+
+- `VITE_` prefixed env vars are baked into the compiled JS bundle at build time.
+  They are not secret and are visible in the browser. No sensitive values should
+  ever be passed via `VITE_` env vars.
+
+---
+
+### 2026-06-12 — GitHub Actions CI/CD: automated backend deployment
+
+**Decision:** Added `.github/workflows/deploy-backend.yml` to automate backend
+deployment on push to main.
+
+**Reasoning:**
+
+- Manual deployment required running five commands in sequence: Docker build,
+  ECR tag, ECR login, ECR push, ECS force redeployment. Error-prone and slow to
+  iterate on.
+- GitHub Actions replaces this with a triggered workflow using
+  `aws-actions/configure-aws-credentials` and `aws-actions/amazon-ecr-login` for
+  AWS auth, and `docker buildx build --platform linux/amd64 --push` to build and
+  push in a single step.
+- AWS credentials are stored as GitHub Actions secrets (`AWS_ACCESS_KEY_ID`,
+  `AWS_SECRET_ACCESS_KEY`) using the existing `terraform-user` IAM credentials.
+
+**Key details:**
+
+- Workflow only triggers when files under `backend/` change, avoiding
+  unnecessary deployments on frontend or infra changes.
+- Images are tagged with both `latest` and the git commit SHA, allowing deployed
+  versions to be traced back to a specific commit.
+- ECS redeployment is triggered via
+  `aws ecs update-service --force-new-deployment` as the final step.
