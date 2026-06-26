@@ -3,7 +3,7 @@
 A grounded Q&A agent for UK food safety and compliance, with cited sources and a
 domain-expert-validated evaluation framework.
 
-**Status:** Version 1 Shipped. Available to view and run at: https://compliance-qa-project.netlify.app/
+**Status:** Version 1 shipped. Available to view and run at: https://compliance-qa-project.netlify.app/
 
 ## What it does
 
