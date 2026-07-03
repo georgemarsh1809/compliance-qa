@@ -2,6 +2,18 @@
 
 _Design decisions and trade-offs. Updated as the project evolves._
 
+## Status and next steps
+
+Version 1 is complete and deployed. The core retrieval pipeline, evaluation
+harness, and production infrastructure are all in place.
+
+Planned next steps:
+
+- Observability: wire up structlog for structured logging, OpenTelemetry for
+  distributed tracing, and LangSmith for LLM call visibility across the pipeline
+- Expand the corpus to additional regulatory domains beyond UK food safety
+- Extend the evaluation harness with adversarial and edge-case questions
+
 ## Decision log
 
 ### 2026-05-19 — Domain and corpus

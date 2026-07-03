@@ -16,9 +16,3 @@ llama-index-readers-file==0.2.2
 
 langgraph==0.2.45
 langsmith==0.1.144
-
-structlog==24.4.0
-opentelemetry-api==1.27.0
-opentelemetry-sdk==1.27.0
-opentelemetry-instrumentation-fastapi==0.48b0
-opentelemetry-exporter-otlp==1.27.0
