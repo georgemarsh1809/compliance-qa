@@ -16,6 +16,10 @@ function App() {
         setIsLoading(false);
     }
 
+    function handleClear() {
+        setQuestion(' ');
+    }
+
     return (
         <>
             <div className="min-h-screen bg-slate-900 flex flex-col">
@@ -29,17 +33,29 @@ function App() {
                         question about UK food safety law and it will return a
                         grounded answer with citations to the source document.
                     </p>
-                    <a
-                        href="https://www.food.gov.uk/sites/default/files/media/document/Food%20standards%20safety%20act%201990%20PDF.pdf"
-                        target="_blank"
-                        className="text-white underline italic"
-                    >
-                        View source: Food Safety Act 1990
-                    </a>
+
+                    <span className="group relative cursor-not-allowed w-fit">
+                        <a
+                            href="https://www.food.gov.uk/sites/default/files/media/document/Food%20standards%20safety%20act%201990%20PDF.pdf"
+                            target="_blank"
+                            aria-disabled="true"
+                            tabIndex={-1}
+                            className="text-white underline italic pointer-events-none opacity-50"
+                        >
+                            View source: Food Safety Act 1990
+                        </a>
+                        <span
+                            className="absolute bottom-full left-1/2 -translate-x-1/2 mb-1 hidden group-hover:block
+                         bg-gray-800 text-white text-xs rounded px-2 py-1 whitespace-nowrap"
+                        >
+                            Link temporarily unavailable
+                        </span>
+                    </span>
                     <QueryForm
                         question={question}
                         onChange={setQuestion}
                         onSubmit={handleSubmit}
+                        clearField={handleClear}
                     />
                     {isLoading && <p className="text-white">Loading...</p>}
                     {response !== null && (
