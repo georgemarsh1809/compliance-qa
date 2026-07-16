@@ -39,8 +39,13 @@ export const QueryForm = ({
                 </button>
             </div>
             <button
-                className="text-slate-900 bg-white cursor-pointer rounded px-2"
+                className={`rounded px-2 ${
+                    question.trim() === ''
+                        ? 'bg-gray-400 text-slate-900 '
+                        : 'bg-white text-slate-900 cursor-pointer'
+                }`}
                 onClick={() => onSubmit(question)}
+                disabled={question.trim() === ''}
             >
                 Submit
             </button>
