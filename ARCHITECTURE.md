@@ -627,3 +627,76 @@ deployment on push to main.
   versions to be traced back to a specific commit.
 - ECS redeployment is triggered via
   `aws ecs update-service --force-new-deployment` as the final step.
+
+---
+
+### 2026-07-18 — Eval harness results: v1 verification
+
+The eval harness had been run in earlier sessions to verify the pipeline was
+functioning and that out-of-corpus questions were correctly refused. This run
+constitutes the full manual review of happy path and oblique answers against the
+reference answers and the source corpus.
+
+**Results:** 21 questions run against the live backend.
+
+- Out-of-corpus refusal check: 6/6 passed
+- Happy path: 12 questions, manually reviewed
+- Oblique: 3 questions, manually reviewed
+
+**Notable findings:**
+
+Q05 (fish substitution): the system answer is considered stronger than the
+reference answer. The reference answer only cites section 14; the system
+correctly identifies both section 14 and section 15 as applicable. Reference
+answer updated accordingly.
+
+Q07 (due diligence, branded vs own-label): partial retrieval. The own-label
+conditions span a chunk boundary; the second and third conditions (reasonable
+checks, no reason to suspect an offence) were not retrieved. Answer is
+incomplete but not wrong. Root cause: token-count chunking is blind to paragraph
+boundaries. Fix: increase chunk overlap so content split across a boundary is
+captured by the adjacent chunk. Logged as future improvement.
+
+Q09 (inspector entry powers): partial retrieval. The broad definition of
+premises (vehicles, ships, aircraft, market stalls, private dwellings) sits at
+the end of the relevant page and was cut by the chunk boundary. Same root cause
+as Q07.
+
+Q20 (unreasonable council officer): known retrieval gap on a deliberately
+multi-topic oblique question. The question contains two distinct information
+needs: limits on officer conduct, and appeal rights. The query embeds as a
+single vector sitting between both relevant regions of the embedding space,
+retrieving only the appeals content. Fix: query decomposition via LLM analyser
+before retrieval -- identify distinct information needs, run parallel
+retrievals, merge results before generation. Logged as future improvement.
+
+**Domain expert review:** eval question set reviewed by Tony Marsh (food
+industry background, storage and distribution of chilled, ambient and frozen
+goods). Review confirmed answers are coherent and plausible to an industry
+practitioner. Full legal validation of answer accuracy is pending; answers are
+grounded in the FSA guide with page and paragraph citations throughout.
+
+---
+
+### Future improvements logged post v1
+
+**Query decomposition:** for multi-topic questions, add a LangGraph node before
+retrieval that uses an LLM to identify distinct information needs and decompose
+the query into focused sub-questions. Each sub-question is embedded and
+retrieved independently; results are merged before generation. This solves the
+embedding-space averaging problem where a multi-topic query vector sits between
+relevant regions rather than near either one.
+
+**Chunk overlap tuning:** increase overlap in LlamaIndex ingestion config so
+that content split across chunk boundaries is captured by adjacent chunks.
+Particularly relevant for dense legislative text where a single paragraph may
+span a boundary.
+
+**Structurally-aware chunking:** replace token-count chunking with
+section/paragraph-aware chunking that respects document structure. Would prevent
+mid-paragraph splits entirely. Higher implementation cost than overlap tuning
+but more principled.
+
+**LLM-as-judge scoring:** add automated scoring of happy path and oblique
+answers using an LLM judge, reducing reliance on manual review. Currently only
+out-of-corpus refusals are scored automatically.

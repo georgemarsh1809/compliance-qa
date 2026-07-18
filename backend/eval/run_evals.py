@@ -60,4 +60,4 @@ with open(RESULTS_DIR, "w") as f:
 print(f"Out-of-corpus refusal check: {passed_count}/6 passed")
 print("Happy path (manual review): 12 questions")
 print("Oblique (manual review): 3 questions")
-print(f"Results saved to: evals/results/results_{timestamp}.json.json")
+print(f"Results saved to: evals/results/results_{timestamp}.json")

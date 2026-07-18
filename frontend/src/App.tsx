@@ -17,7 +17,7 @@ function App() {
     }
 
     function handleClear() {
-        setQuestion(' ');
+        setQuestion(' '); // CHANGE TO EMPTY STRING
     }
 
     return (
