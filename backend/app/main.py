@@ -13,8 +13,9 @@ from app.schemas import QueryRequest, QueryResponse, Source
 @asynccontextmanager
 async def lifespan(app: FastAPI) -> AsyncIterator[None]:
     # Startup
-    app.state.agent = build_agent()
-    app.state.index = load_index()
+    index = load_index()
+    app.state.index = index
+    app.state.agent = build_agent(index)
     yield
 
 

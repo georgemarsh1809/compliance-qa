@@ -55,18 +55,16 @@ def rewrite_node(state: AgentState) -> dict[str, Any]:
     return {"query": response, "retry_count": state["retry_count"] + 1}
 
 
-# Node: Retrieve
-def retrieve_node(state: AgentState) -> dict[str, Any]:
-    return {"chunks": retrieve(state["query"])}
-
-
 # Node: Generate
 def generate_node(state: AgentState) -> dict[str, Any]:
     return {"answer": generate_answer(state["question"], state["chunks"])}
 
 
 if __name__ == "__main__":
-    chunks = retrieve("What is the due dilligence defence?")
+    from app.retrieval import load_index
+
+    index = load_index()
+    chunks = retrieve("What is the due dilligence defence?", index=index)
 
     state: AgentState = {
         "question": "what is the due diligence defence?",

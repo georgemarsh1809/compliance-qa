@@ -40,14 +40,8 @@ def load_index(index_dir: Path = DEFAULT_INDEX_DIR) -> VectorStoreIndex:
     return index
 
 
-def retrieve(question: str, top_k: int = 3) -> list[NodeWithScore]:
-    # 1. Load the index
-    index = load_index()
-
-    # 2. Instantiate the retriever with the index, defining the amount of similar nodes needed (top_k: 3 is a default)
+def retrieve(question: str, index: VectorStoreIndex, top_k: int = 3) -> list[NodeWithScore]:
     retriever = index.as_retriever(similarity_top_k=top_k)
-
-    # 3. Retrieve the nodes (chunks of text) with the highest similarity to the meaning of the question
     nodes = retriever.retrieve(question)
 
     return cast(list[NodeWithScore], nodes)

@@ -1,8 +1,12 @@
+from typing import Any
+
 from langgraph.graph import END, START, StateGraph
 from langgraph.graph.state import CompiledStateGraph
+from llama_index.core import VectorStoreIndex
 
-from app.agent.nodes import generate_node, grade_node, retrieve_node, rewrite_node
+from app.agent.nodes import generate_node, grade_node, rewrite_node
 from app.agent.state import AgentState
+from app.retrieval import retrieve
 
 MAX_RETRIES = 2
 
@@ -15,7 +19,10 @@ def decide_after_grade(state: AgentState) -> str:
     return "rewrite"
 
 
-def build_agent() -> CompiledStateGraph:
+def build_agent(index: VectorStoreIndex) -> CompiledStateGraph:
+    def retrieve_node(state: AgentState) -> dict[str, Any]:
+        return {"chunks": retrieve(state["query"], index)}
+
     builder = StateGraph(AgentState)
 
     # Define Nodes
@@ -38,7 +45,11 @@ def build_agent() -> CompiledStateGraph:
 
 
 if __name__ == "__main__":
-    result = build_agent().invoke(
+    from app.retrieval import load_index
+
+    index = load_index()
+
+    result = build_agent(index).invoke(
         {
             "question": "if a shop sells me something different from what I paid for, is that against food law?",
             "query": "if a shop sells me something different from what I paid for, is that against food law?",
